@@ -1,0 +1,19 @@
+name: Semgrep
+on:
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    # run every Sunday at 8:00
+    - cron: '0 8 * * 0'
+
+jobs:
+  scan:
+    name: scan
+    uses: sli-do/shared-workflow/.github/workflows/security-semgrep.yaml@main
+    with:
+      # create PR review comments from Semgrep results
+      review: true
+      # block PR with findings severity >= WARNING
+      fail_threshold: WARNING
+    # inherit secrets from the calling workflow
+    secrets: inherit
