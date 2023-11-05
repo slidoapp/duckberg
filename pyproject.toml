@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "duckberg"
+version = "0.1.0"
+description = "Combination of DuckDB and Apache Iceberg (PyIceberg) for querying data"
+authors = ["Gregor Karetka <gkaretka@cisco.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pyiceberg = {extras = ["duckdb", "glue", "s3fs"], version = "^0.5.1"}
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
