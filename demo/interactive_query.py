@@ -1,4 +1,4 @@
-from duckberg import IcebergDuckdbExecutor
+from duckberg import DuckBerg
 from pyiceberg.expressions import EqualTo
 
 MINIO_URI = "http://localhost:9000/"
@@ -17,7 +17,7 @@ catalog_type: dict[str, str] = {
 catalog_name = "warehouse"
 tables = ["nyc.taxis"]
 
-duckberg = IcebergDuckdbExecutor(tables=tables,
+duckberg = DuckBerg(tables=tables,
                                  catalog_name=catalog_name,
                                  catalog_type=catalog_type)
 

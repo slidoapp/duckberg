@@ -13,7 +13,7 @@ DEFAULT_CATALOG_NAME="default"
 DEFAULT_CATALOG_TYPE="glue"
 
 
-class IcebergDuckdbExecutor:
+class DuckBerg:
     """Iceberg + DuckDB query executor for exports in datapi"""
 
     def __init__(self, tables: [str],
