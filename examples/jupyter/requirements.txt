@@ -1,0 +1,2 @@
+duckberg==0.0.2
+pandas

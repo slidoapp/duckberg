@@ -1,1 +1,0 @@
-pyiceberg[s3fs,sql-postgres,pyarrow,duckdb]
