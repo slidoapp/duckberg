@@ -1,0 +1,3 @@
+init/data/*.parquet
+
+examples/jupyter/notebooks/.ipynb_checkpoints
