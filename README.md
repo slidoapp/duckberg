@@ -88,7 +88,7 @@ df = db.select(table="nyc.taxis", partition_filter="payment_type = 1", sql=query
 ```
 
 ## Playground
-You can run the playground environment running docker compose in the [playground](Playground/README.md)
+You can run the playground environment running docker compose in the [playground](./playground)
 
 ```shell
 cd playground
