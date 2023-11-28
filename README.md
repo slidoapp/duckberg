@@ -2,13 +2,17 @@
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/slidoapp/duckberg/main/static/images/duckberg.png" /> <br />
-  <strong>Duckberg</strong> <br />
-  <em>query your data lakes easy and efficient</em>
+  <strong>DuckBerg</strong> <br />
+  <em>query your iceberg data easily and efficiently</em>
 </p>
 
 
+[![Hatch project](https://img.shields.io/badge/%F0%9F%A5%9A-Hatch-4051b5.svg)](https://github.com/pypa/hatch) 
 [![PyPI - Version](https://img.shields.io/pypi/v/duckberg.svg)](https://pypi.org/project/duckberg)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/duckberg.svg)](https://pypi.org/project/duckberg)
+[![linting - Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+[![code style - Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-green.svg)
 
 -----
 
@@ -16,8 +20,8 @@
 
 - [About](#about)
 - [Installation](#installation)
-- [Examples](#examples)
 - [Features](#features)
+- [Playground](#playground)
 - [Development](#development)
 - [License](#license)
 
@@ -25,15 +29,14 @@
 Duckberg is a Python package that synthesizes the power of PyIceberg and DuckDb. PyIceberg enables efficient 
 interaction with Apache Iceberg, a format for handling large datasets, while DuckDb offers swift in-memory data 
 analysis. When combined, these tools create Duckberg, which simplifies the querying process for large Iceberg 
-datasets stored on blob storage. Duckberg offers high-speed data processing, memory efficiency, and a user-friendly 
-Pythonic approach, making the querying of big data without an external query engine easy and efficient.
+datasets stored on blob storage with a user-friendly Pythonic approach.
 
 The underlying principle of the Duckberg Python package is to execute your SQL queries only on those data lake files 
 that contain the necessary data for your results. To fully utilize the benefits of this package, it's assumed that 
 your data is partitioned in a manner that suits your query and use case.
 
 ### Iceberg catalog types
-Duckberg supports the same Iceberg catalogs as [PyIceberg]((https://py.iceberg.apache.org/configuration/)), including 
+Duckberg supports the same Iceberg catalogs as [PyIceberg](https://py.iceberg.apache.org/configuration/), including 
 REST, SQL, Hive, Glue, and DynamoDB. These catalogs are sources of information about Iceberg datasets, tables, 
 partitions, etc. Before using Duckberg, ensure that you have access to an Iceberg catalog that can be utilized.
 
@@ -42,30 +45,6 @@ partitions, etc. Before using Duckberg, ensure that you have access to an Iceber
 ```console
 pip install duckberg
 ```
-
-## Examples
-This repository contains docker compose environment that uses 
-- [Spark Iceberg](https://github.com/tabular-io/docker-spark-iceberg) for Iceberg data initialisation through Spark 
-- [Rest Iceberg Catalog](https://github.com/tabular-io/iceberg-rest-image) for storing Iceberg metadata 
-- [Minio](https://min.io/) as an object storage that is S3 compatible. 
-- Jupyter with preinstalled Duckberg to run examples and experiments
-
-To spin up local environment use
-
-```shell
-cd examples
-docker-compose up -d
-```
-
-The initial run could take additional time for jupyter docker image build
-
-### Iceberg data init
-Once all the containers have been initiated go to [Spark Iceberg Jupyter notebook](http://localhost:8889/notebooks/000%20Init%20Iceberg%20data.ipynb) and run the 
-notebook to init the Iceberg data and catalog.
-
-### Duckberg playground
-
-Navigate to [localhost:8888](localhost:8888). Then select example Jupyter notebook you want to run and enjoy Duckberg!
 
 ## Features
 
@@ -108,10 +87,27 @@ query = "SELECT * FROM nyc.taxis WHERE trip_distance > 40 ORDER BY tolls_amount 
 df = db.select(table="nyc.taxis", partition_filter="payment_type = 1", sql=query)
 ```
 
+## Playground
+You can run the playground environment running docker compose in the [playground](Playground/README.md)
+
+```shell
+cd playground
+docker-compose up -d
+```
+
+The initial run could take additional time for jupyter docker image build. Then you can access
+
+### Iceberg data init
+Once all the containers have been initiated run the [Spark Iceberg Jupyter notebook](http://localhost:8889/notebooks/000%20Init%20Iceberg%20data.ipynb) that will
+init the Iceberg data and catalog.
+
+### Duckberg playground
+Navigate to [localhost:8888](http://localhost:8888). Then select example Jupyter notebook you want to run and enjoy Duckberg!
+
 ## Development
 
 TBD ...
 
 ## License
 
-`duckberg` is distributed under the terms of the [MIT](https://spdx.org/licenses/MIT.html) license.
+`duckberg` is distributed under the terms of the [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt) license.

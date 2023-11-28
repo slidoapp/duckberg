@@ -1,8 +1,8 @@
-FROM tabulario/spark-iceberg
+FROM jupyter/minimal-notebook
 
 # Install Python Packages & Requirements (Done near end to avoid invalidating cache)
-COPY requirements.txt requirements-duckberg.txt
-RUN pip install -r requirements-duckberg.txt
+COPY requirements.txt requirements.txt
+RUN pip install -r requirements.txt
 
 # Expose Jupyter port & cmd
 EXPOSE 8888
