@@ -1,8 +1,8 @@
 import sqlparse
-
-from duckberg.table import TableWithAlias
 from pyiceberg.expressions import *
 from pyiceberg.expressions import parser
+
+from duckberg.table import TableWithAlias
 
 
 class DuckBergSQLParser:

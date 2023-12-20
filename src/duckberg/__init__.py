@@ -1,12 +1,13 @@
 """Module containing services needed for executing queries with Duckdb + Iceberg."""
 
 from typing import Optional
+
 import duckdb
 from pyarrow.lib import RecordBatchReader
 from pyiceberg.catalog import Catalog, load_catalog, load_rest
-from duckberg.exceptions import TableNotInCatalogException
 from pyiceberg.expressions import AlwaysTrue
 
+from duckberg.exceptions import TableNotInCatalogException
 from duckberg.sqlparser import DuckBergSQLParser
 from duckberg.table import DuckBergTable, TableWithAlias
 
@@ -70,7 +71,9 @@ class DuckBerg:
 
         return t.partitions
 
-    def select(self, sql: str, table: str = None, partition_filter: str = None, sql_params: [str] = None) -> RecordBatchReader:
+    def select(
+        self, sql: str, table: str = None, partition_filter: str = None, sql_params: [str] = None
+    ) -> RecordBatchReader:
         if table is not None and partition_filter is not None:
             return self._select_old(sql, table, partition_filter, sql_params)
 
@@ -94,12 +97,9 @@ class DuckBerg:
         if sql_params is None:
             return self.duckdb_connection.execute(sql).fetch_record_batch(self.batch_size_rows)
         else:
-            return (
-                self.duckdb_connection.execute(sql, parameters=sql_params)
-                .fetch_record_batch(self.batch_size_rows)
-            )
-        
-    def _select_old(self,  sql: str, table: str, partition_filter: str, sql_params: [str] = None):
+            return self.duckdb_connection.execute(sql, parameters=sql_params).fetch_record_batch(self.batch_size_rows)
+
+    def _select_old(self, sql: str, table: str, partition_filter: str, sql_params: [str] = None):
         table_data_scan_as_arrow = self.tables[table].scan(row_filter=partition_filter).to_arrow()
         self.duckdb_connection.register(table, table_data_scan_as_arrow)
 
