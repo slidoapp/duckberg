@@ -19,14 +19,19 @@ db = DuckBerg(catalog_name=catalog_name, catalog_config=catalog_config)
 
 tables = db.list_tables()
 
-assert len(tables) == 1
+assert(len(tables) == 1)
 
-partitions = db.list_partitions(table="nyc.taxis")
+# New way of quering data without partition filter
+query: str = "SELECT count(*) FROM (SELECT * FROM 'nyc.taxis' WHERE trip_distance > 40 ORDER BY tolls_amount DESC)"
+df = db.select(sql=query).read_pandas()
+assert(df['count_star()'][0] == 2614)
 
-assert len(tables) == 1
+# New way of quering data
+query: str = "SELECT count(*) FROM (SELECT * FROM 'nyc.taxis' WHERE payment_type = 1 AND trip_distance > 40 ORDER BY tolls_amount DESC)"
+df = db.select(sql=query).read_pandas()
+assert(df['count_star()'][0] == 1673)
 
-query: str = "SELECT * FROM 'nyc.taxis' WHERE trip_distance > 40 ORDER BY tolls_amount DESC"
-
-dd = db.select(table="nyc.taxis", partition_filter="payment_type = 1", sql=query)
-
-df = dd.read_pandas()
+# Old way of quering data
+query: str = "SELECT count(*) FROM (SELECT * FROM 'nyc.taxis' WHERE payment_type = 1 AND trip_distance > 40 ORDER BY tolls_amount DESC)"
+df = db.select(sql=query, table="nyc.taxis", partition_filter="payment_type = 1").read_pandas()
+assert(df['count_star()'][0] == 1673)
