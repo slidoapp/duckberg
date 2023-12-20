@@ -23,15 +23,15 @@ assert(len(tables) == 1)
 
 # New way of quering data without partition filter
 query: str = "SELECT count(*) FROM (SELECT * FROM 'nyc.taxis' WHERE trip_distance > 40 ORDER BY tolls_amount DESC)"
-df = db.select(sql=query)
+df = db.select(sql=query).read_pandas()
 assert(df['count_star()'][0] == 2614)
 
 # New way of quering data
 query: str = "SELECT count(*) FROM (SELECT * FROM 'nyc.taxis' WHERE payment_type = 1 AND trip_distance > 40 ORDER BY tolls_amount DESC)"
-df = db.select(sql=query)
+df = db.select(sql=query).read_pandas()
 assert(df['count_star()'][0] == 1673)
 
 # Old way of quering data
 query: str = "SELECT count(*) FROM (SELECT * FROM 'nyc.taxis' WHERE payment_type = 1 AND trip_distance > 40 ORDER BY tolls_amount DESC)"
-df = db.select(sql=query, table="nyc.taxis", partition_filter="payment_type = 1")
+df = db.select(sql=query, table="nyc.taxis", partition_filter="payment_type = 1").read_pandas()
 assert(df['count_star()'][0] == 1673)

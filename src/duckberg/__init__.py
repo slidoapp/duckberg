@@ -92,12 +92,11 @@ class DuckBerg:
             self.duckdb_connection.register(table_name, table_data_scan_as_arrow)
 
         if sql_params is None:
-            return self.duckdb_connection.execute(sql).fetch_record_batch(self.batch_size_rows).read_pandas()
+            return self.duckdb_connection.execute(sql).fetch_record_batch(self.batch_size_rows)
         else:
             return (
                 self.duckdb_connection.execute(sql, parameters=sql_params)
                 .fetch_record_batch(self.batch_size_rows)
-                .read_pandas()
             )
         
     def _select_old(self,  sql: str, table: str, partition_filter: str, sql_params: [str] = None):
@@ -105,6 +104,6 @@ class DuckBerg:
         self.duckdb_connection.register(table, table_data_scan_as_arrow)
 
         if sql_params is None:
-            return self.duckdb_connection.execute(sql).fetch_record_batch(self.batch_size_rows).read_pandas()
+            return self.duckdb_connection.execute(sql).fetch_record_batch(self.batch_size_rows)
         else:
-            return self.duckdb_connection.execute(sql, parameters=sql_params).fetch_record_batch(self.batch_size_rows).read_pandas()
+            return self.duckdb_connection.execute(sql, parameters=sql_params).fetch_record_batch(self.batch_size_rows)
