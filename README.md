@@ -82,9 +82,18 @@ db.list_partitions(table="nyc.taxis")
 
 ### Querying data to Pandas dataframe
 
+In the latest new update we have added very crude and simple SQL parser that can extract necessary information from the SQL query without the need to specify `table` and `partition_filters`. This is the new and prefered way:
+
+```python
+query = "SELECT * FROM nyc.taxis WHERE payment_type = 1 AND trip_distance > 40 ORDER BY tolls_amount DESC"
+df = db.select(sql=query).read_pandas()
+```
+
+Old way of selecting data (will get deprecated in the future):
+
 ```python
 query = "SELECT * FROM nyc.taxis WHERE trip_distance > 40 ORDER BY tolls_amount DESC"
-df = db.select(table="nyc.taxis", partition_filter="payment_type = 1", sql=query).read_pandas()
+df = db.select(sql=query, table="nyc.taxis", partition_filter="payment_type = 1").read_pandas()
 ```
 
 ## Playground

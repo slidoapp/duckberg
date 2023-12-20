@@ -20,7 +20,8 @@ classifiers = [
 
 dependencies = [
   "pyiceberg[duckdb,glue,s3fs]==0.5.1",
-  "pandas==2.1.3"
+  "pandas==2.1.3",
+  "sqlparse==0.4.4"
 ]
 
 [[tool.hatch.envs.test.matrix]]
