@@ -27,4 +27,6 @@ assert len(tables) == 1
 
 query: str = "SELECT * FROM 'nyc.taxis' WHERE trip_distance > 40 ORDER BY tolls_amount DESC"
 
-df = db.select(table="nyc.taxis", partition_filter="payment_type = 1", sql=query)
+dd = db.select(table="nyc.taxis", partition_filter="payment_type = 1", sql=query)
+
+df = dd.read_pandas()
