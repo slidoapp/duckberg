@@ -84,7 +84,7 @@ db.list_partitions(table="nyc.taxis")
 
 ```python
 query = "SELECT * FROM nyc.taxis WHERE trip_distance > 40 ORDER BY tolls_amount DESC"
-df = db.select(table="nyc.taxis", partition_filter="payment_type = 1", sql=query)
+df = db.select(table="nyc.taxis", partition_filter="payment_type = 1", sql=query).read_pandas()
 ```
 
 ## Playground
@@ -105,9 +105,75 @@ init the Iceberg data and catalog.
 Navigate to [localhost:8888](http://localhost:8888). Then select example Jupyter notebook you want to run and enjoy Duckberg!
 
 ## Development
+For the development, there is recommendation to use Python 3.10. If you manage your Python versions by 
+[Pyenv](https://github.com/pyenv/pyenv) use 
 
-TBD ...
+```bash
+pyenv install 3.10.13
+pyenv global 3.10.13
+```
 
+then create and activate virtual environment
+```bash
+python -m venv venv
+source venv/bin/activate 
+```
+
+upgrade pip and install dependencies
+
+```bash
+pip install --upgrade pip
+pip install .
+```
+
+then run dockers that contains Iceberg catalog and file storage containing iceberg files
+
+```shell
+cd playground
+docker-compose up -d
+```
+
+init data by running [Init Jupyter notebook](http://localhost:8889/notebooks/000%20Init%20Iceberg%20data.ipynb) and
+run/test Duckberg in the file `tests/duckberg-sample.py`
+
+### Style & Formatting
+
+Use 
+
+```bash
+hatch run lint:fmt
+hatch run lint:style
+```
+
+## Building package
+
+The Duckberg project is managed by [Hatch](https://hatch.pypa.io/latest/). Follow [Hatch docs] for an installation
+or just install by command
+
+```shell
+brew install hatch
+```
+
+or 
+
+```shell
+pip install hatch
+```
+
+Increase package by
+```bash
+hatch version "x.x.x"
+```
+
+Build 
+```bash
+hatch build
+```
+
+and publish
+```bash
+hatch publish
+```
 ## License
 
 `duckberg` is distributed under the terms of the [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt) license.

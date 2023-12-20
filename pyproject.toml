@@ -7,23 +7,15 @@ name = "duckberg"
 dynamic = ["version"]
 description = ''
 readme = "README.md"
-requires-python = ">=3.7"
-license = "Apache 2.0"
+requires-python = ">=3.10"
+license = "Apache-2.0"
 keywords = []
 authors = [
   { name = "gregor", email = "gkaretka@cisco.com" },
   { name = "jojo", email = "jcechovs@cisco.com" },
 ]
 classifiers = [
-  "Development Status :: 4 - Beta",
-  "Programming Language :: Python",
-  "Programming Language :: Python :: 3.7",
-  "Programming Language :: Python :: 3.8",
-  "Programming Language :: Python :: 3.9",
-  "Programming Language :: Python :: 3.10",
-  "Programming Language :: Python :: 3.11",
-  "Programming Language :: Python :: Implementation :: CPython",
-  "Programming Language :: Python :: Implementation :: PyPy",
+  "Programming Language :: Python :: 3.10"
 ]
 
 dependencies = [
@@ -32,12 +24,12 @@ dependencies = [
 ]
 
 [[tool.hatch.envs.test.matrix]]
-python = ["3.7", "3.8", "3.9", "3.10", "3.11"]
+python = ["3.10"]
 
 [project.urls]
-Documentation = "https://github.com/unknown/duckberg#readme"
-Issues = "https://github.com/unknown/duckberg/issues"
-Source = "https://github.com/unknown/duckberg"
+Documentation = "https://github.com/slidoapp/duckberg/blob/main/README.md"
+Issues = "https://github.com/slidoapp/duckberg/issues"
+Source = "https://github.com/slidoapp/duckberg"
 
 [tool.hatch.version]
 path = "src/duckberg/__about__.py"
@@ -60,7 +52,7 @@ cov = [
 ]
 
 [[tool.hatch.envs.all.matrix]]
-python = ["3.7", "3.8", "3.9", "3.10", "3.11"]
+python = ["3.10"]
 
 [tool.hatch.envs.lint]
 detached = true
