@@ -1,8 +1,8 @@
 import sqlparse
-
-from duckberg.table import TableWithAlias
 from pyiceberg.expressions import *
 from pyiceberg.expressions import parser
+
+from duckberg.table import TableWithAlias
 
 
 class DuckBergSQLParser:
@@ -46,4 +46,5 @@ class DuckBergSQLParser:
 
     def extract_where_conditions(self, where_statement: list[sqlparse.sql.Where]):
         comparison = sqlparse.sql.TokenList(where_statement[1:])
-        return parser.parse(str(comparison))
+        where_condition = str(comparison).replace('"', "'")  # revert from double to single
+        return parser.parse(where_condition)

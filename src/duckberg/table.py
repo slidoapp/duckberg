@@ -1,10 +1,10 @@
+import sqlparse
 from pyiceberg.catalog import Catalog
+from pyiceberg.expressions import BooleanExpression
 from pyiceberg.io import FileIO
 from pyiceberg.table import Table
 from pyiceberg.table.metadata import TableMetadata
 from pyiceberg.typedef import Identifier
-from pyiceberg.expressions import BooleanExpression
-import sqlparse
 
 
 class DuckBergTable(Table):
