@@ -28,25 +28,26 @@ class DuckBerg:
         db_thread_limit: Optional[int] = DEFAULT_DB_THREAD_LIMIT,
         db_mem_limit: Optional[str] = DEFAULT_MEM_LIMIT,
         batch_size_rows: Optional[int] = BATCH_SIZE_ROWS,
+        single_db_per_request: bool = True
     ):
         self.db_thread_limit = db_thread_limit
         self.db_mem_limit = db_mem_limit
         self.batch_size_rows = batch_size_rows
         self.duckdb_connection = duckdb_connection
+        self.single_db_per_request = single_db_per_request
 
-        if self.duckdb_connection == None:
+        if self.duckdb_connection == None and not single_db_per_request:
             self.duckdb_connection = duckdb.connect()
-            self.init_duckdb()
+            self.init_duckdb(self.duckdb_connection)
 
         self.sql_parser = DuckBergSQLParser()
         self.tables: dict[str, DuckBergTable] = {}
 
-        self.init_duckdb()
         self.__get_tables(catalog_config, catalog_name)
 
-    def init_duckdb(self):
-        self.duckdb_connection.execute(f"SET memory_limit='{self.db_mem_limit}'")
-        self.duckdb_connection.execute(f"SET threads TO {self.db_thread_limit}")
+    def init_duckdb(self, db = None):
+        db.execute(f"SET memory_limit='{self.db_mem_limit}'")
+        db.execute(f"SET threads TO {self.db_thread_limit}")
 
     def __get_tables(self, catalog_config, catalog_name):
         tables = {}
@@ -92,18 +93,28 @@ class DuckBerg:
                 row_filter = table.comparisons
 
             table_data_scan_as_arrow = self.tables[table_name].scan(row_filter=row_filter).to_arrow()
-            self.duckdb_connection.register(table_name, table_data_scan_as_arrow)
+
+            db = self.duckdb_connection
+            if self.single_db_per_request:
+                db = duckdb.connect()
+                self.init_duckdb(db)
+            db.register(table_name, table_data_scan_as_arrow)
 
         if sql_params is None:
-            return self.duckdb_connection.execute(sql).fetch_record_batch(self.batch_size_rows)
+            return db.execute(sql).fetch_record_batch(self.batch_size_rows)
         else:
-            return self.duckdb_connection.execute(sql, parameters=sql_params).fetch_record_batch(self.batch_size_rows)
+            return db.execute(sql, parameters=sql_params).fetch_record_batch(self.batch_size_rows)
 
     def _select_old(self, sql: str, table: str, partition_filter: str, sql_params: [str] = None):
         table_data_scan_as_arrow = self.tables[table].scan(row_filter=partition_filter).to_arrow()
-        self.duckdb_connection.register(table, table_data_scan_as_arrow)
+
+        db = self.duckdb_connection
+        if self.single_db_per_request:
+            db = duckdb.connect()
+            self.init_duckdb(db)
+        db.register(table, table_data_scan_as_arrow)
 
         if sql_params is None:
-            return self.duckdb_connection.execute(sql).fetch_record_batch(self.batch_size_rows)
+            return db.execute(sql).fetch_record_batch(self.batch_size_rows)
         else:
-            return self.duckdb_connection.execute(sql, parameters=sql_params).fetch_record_batch(self.batch_size_rows)
+            return db.execute(sql, parameters=sql_params).fetch_record_batch(self.batch_size_rows)
