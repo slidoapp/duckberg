@@ -46,3 +46,14 @@ def test_select_3(get_duckberg):
     query: str = "SELECT count(*) FROM (SELECT * FROM 'nyc.taxis' WHERE payment_type = 1 AND trip_distance > 40 ORDER BY tolls_amount DESC)"
     df = get_duckberg.select(sql=query, table="nyc.taxis", partition_filter="payment_type = 1").read_pandas()
     assert df["count_star()"][0] == 1673
+
+
+def test_select_multiple_one_request(get_duckberg):
+    # Chceck running multiple queries at once on single duckberg
+    query: str = "SELECT count(*) FROM (SELECT * FROM 'nyc.taxis' WHERE trip_distance > 40 ORDER BY tolls_amount DESC)"
+    dbconn1 = get_duckberg.select(sql=query)
+    query: str = "SELECT count(*) FROM (SELECT * FROM 'nyc.taxis' WHERE payment_type = 1 AND trip_distance > 40 ORDER BY tolls_amount DESC)"
+    dbconn2 = get_duckberg.select(sql=query)
+
+    assert dbconn1.read_pandas()["count_star()"][0] == 2614
+    assert dbconn2.read_pandas()["count_star()"][0] == 1673
